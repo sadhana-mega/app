@@ -8,4 +8,4 @@ def hello():
 
 @app.route("/upload", methods=['POST'])
 def upload():
-    handlers.upload.main(app)
+    return handlers.upload.main(app)
