@@ -61,11 +61,6 @@
             $.get('/random', function (data) {
                 data = JSON.parse(data);
                 i = 0;
-                data.forEach(function (reply_pair){
-                    $.get('/nlu/' + data[i][1], function (cdata) {
-                        console.log(cdata);
-                    });
-                });
                 function osome() {
                     if (!(typeof data[i] === 'undefined')) {
                         $("#current-conversation, #original-conversation").append("<b>Customer: </b>" +
@@ -75,12 +70,8 @@
                             i++;
                             $("#current-conversation").append("<b>User: </b>" + $(
                                 "#agent-reply").val() + "<br><br>");
-                            $.get('/nlu/' + $("#agent-reply").val(), function (cdata) {
-                                console.log(cdata);
-                            });
                             $("#original-conversation").append("<b>Agent: </b>" + data[i][1] +
                                 "<br><br>");
-                            
                             $("#agent-reply").val("");
                             osome();
                         });

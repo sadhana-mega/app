@@ -30,26 +30,16 @@ function stopRecording() {
             processData: false,
             success: function (data) {
                 transcript = data.transcript;
-                console.log(transcript);
+                stt_words = transcript['results'][0]['alternatives'][0]['transcript'].split(" ")
+                console.log(stt_words)
                 input = []
-                confidences = [];
-                confidence_sum = 0;
-                for(i=0; i<transcript.words.length; i++)
+                for(i=0; i<stt_words.length; i++)
                 {
-                    input.push(transcript.words[i].text);
-                    confidences.push(transcript.words[i].confidence);
+                    input.push(stt_words[i]);
                 }
                 given_words = $("#para").html().trim().split(" ");
-                given_words.forEach(function(word){
-                    if (typeof word === 'array') {
-                        console.log(word);
-                    }
-                });
-                given_words.filter(function(word){
-                    return (typeof word === 'string');
-                });
                 word_score = 0;
-                for (var i = 0; i < input.length; i++) {
+                for (var i = 0; i < input.length && given_words[i] !== undefined; i++) {
                     var para = document.createElement('span');
                     var text = document.createTextNode(input[i] + " ");
                     para.appendChild(text);
@@ -57,7 +47,6 @@ function stopRecording() {
                     {
                         para.className = "correct";
                         word_score++;
-                        confidence_sum += confidences[i];
                     }
                     else if (given_words[i].toLowerCase() !== input[i].toLowerCase())
                     {
@@ -66,9 +55,9 @@ function stopRecording() {
                     document.querySelector('.result').appendChild(para);
                 }
                 $("#word-score").html("Word Score: " + word_score.toString());
-                clarity = confidence_sum / word_score;
-                clarity_percentage = confidence_sum ? Math.round(clarity * 100) : confidence_sum;
-                $("#clarity").html("Clarity in Correct Words: " + clarity_percentage + "%");
+                proficiency = word_score / input.length;
+                proficiency_percentage = word_score ? Math.round(proficiency * 100) : word_score;
+                $("#clarity").html("Proficiency: " + proficiency_percentage + "%");
                 $("#lead-status").html("Please check results on the right.");
                 $("#lead-progress").css({'visibility' : 'hidden'});
             },
@@ -112,5 +101,12 @@ $(document).ready(function () {
         $("#lead-progress").css({'visibility' : 'visible'});
         $("#lead-progress .progress-bar").addClass("bg-danger");
         stopRecording();
+    });
+
+    $("#randomize").click(function(){
+        $("#para").html("Loading a random reply...");
+        $.get('/random', function (data) {
+            $("#para").html(data);
+        });
     });
 });
