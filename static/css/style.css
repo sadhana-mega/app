@@ -1,0 +1,7 @@
+.correct {
+    color: #249800;
+}
+
+.incorrect {
+    color: rgb(255, 0, 0);
+}
