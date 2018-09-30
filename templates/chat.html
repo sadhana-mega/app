@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?ver=1.0.0">
+    <!--<link rel="stylesheet" href="/static/css/megathon.css">-->
+    <title>Sadhana - AI based Customer Service Evaluation</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Sadhana</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav><br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Current Conversation</h2>
+                <div class="jumbotron" id="current-conversation"></div>
+                <div class="d-flex justify-content-center">
+                    <div class="jumbotron">
+                        <form id="reply-form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Enter reply" id="agent-reply">
+                                <small class="form-text text-muted">All your responses will be evaluated.</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Original Contextual Information</h2>
+                <div class="jumbotron" id="original-conversation"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get('/random', function (data) {
+                data = JSON.parse(data);
+                i = 0;
+                data.forEach(function (reply_pair){
+                    $.get('/nlu/' + data[i][1], function (cdata) {
+                        console.log(cdata);
+                    });
+                });
+                function osome() {
+                    if (!(typeof data[i] === 'undefined')) {
+                        $("#current-conversation, #original-conversation").append("<b>Customer: </b>" +
+                            data[i][0] + "<br><br>");
+                        $("#reply-form").on('submit', function (e) {
+                            e.preventDefault();
+                            i++;
+                            $("#current-conversation").append("<b>User: </b>" + $(
+                                "#agent-reply").val() + "<br><br>");
+                            $.get('/nlu/' + $("#agent-reply").val(), function (cdata) {
+                                console.log(cdata);
+                            });
+                            $("#original-conversation").append("<b>Agent: </b>" + data[i][1] +
+                                "<br><br>");
+                            
+                            $("#agent-reply").val("");
+                            osome();
+                        });
+                    }
+                }
+                osome();
+            });
+        });
+    </script>
+</body>
+
+</html>

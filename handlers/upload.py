@@ -26,7 +26,7 @@ def main(app):
         if file and allowed_file(file.filename, allowed_extensions = set(['wav', 'mp3'])):
            file.save('/home/sripravan/Projects/sadhana-mega/app/static/audio/test.wav')
            aai = assemblyai.Client(token='6a4fddfb6ae9430c93c29f24dc109a80')
-           transcript = aai.transcribe(filename='/home/sripravan/Projects/sadhana-mega/app/static/audio/test.wav', format_text=False)
+           transcript = aai.transcribe(filename='/home/sripravan/Projects/sadhana-mega/app/static/audio/test.wav')
            while transcript.status != 'completed':
                transcript = transcript.get()
            status = {

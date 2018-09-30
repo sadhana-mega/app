@@ -39,13 +39,17 @@
                 <div class="jumbotron">
                     <h1>Sadhana</h1><br>
                     <h2>AI based Customer Service Evaluation</h2><br><br>
-                    <button class="btn btn-info" id="start">Start Evaluation</button>
-                    <button class="btn btn-info" id="stop">Stop Evaluation</button>
+                    <button class="btn btn-info" id="start">Start Recording</button>
+                    <button class="btn btn-info" id="stop">Stop Recording and Evaluate</button>
+                    <p class="lead" id="lead-status"  style="padding-top: 30px"></p>
+                    <div class="progress" id="lead-progress" style="visibility: hidden;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="jumbotron">
-                    <p class="lead" id="para">Hello John thank you for calling Provide Support How may I help you</p>
+                    <p class="lead" id="para">Hello John thank you for calling Provide Support. How may I help you?</p>
                     <p class="lead result" id="result"></p>
                     <h5 id="word-score"></h5>
                     <h5 id="clarity"></h5>
